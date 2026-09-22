@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Map artwork locating De Palms Hotels in GRA Phase 2, Port Harcourt</title>
+  <desc id="desc">A minimal static map with an emerald marker for De Palms Hotels on Elelenwo Road.</desc>
+  <rect width="1200" height="720" fill="#edf1eb"/>
+  <g fill="none" stroke="#ffffff" stroke-linecap="square">
+    <path d="M-80 574L1280 76" stroke-width="34"/><path d="M-60 130L1250 650" stroke-width="24"/>
+    <path d="M150-60L810 780" stroke-width="19"/><path d="M530-30L1170 740" stroke-width="13"/>
+    <path d="M-40 354L1250 402" stroke-width="12"/><path d="M50 700L1080 40" stroke-width="10"/>
+  </g>
+  <g fill="none" stroke="#bdd0ba" stroke-width="2" opacity=".85">
+    <path d="M0 84H1200M0 196H1200M0 310H1200M0 527H1200"/><path d="M118 0V720M350 0V720M822 0V720M1040 0V720"/>
+  </g>
+  <g fill="#6f8f72" opacity=".8"><rect x="75" y="95" width="78" height="35"/><rect x="186" y="118" width="44" height="64"/><rect x="938" y="120" width="103" height="44"/><rect x="1010" y="516" width="65" height="50"/><rect x="260" y="520" width="60" height="43"/><rect x="110" y="435" width="72" height="39"/></g>
+  <g font-family="Arial, sans-serif" fill="#587258" font-size="17" font-weight="700" letter-spacing="2"><text x="110" y="73">GRA PHASE 2</text><text x="908" y="634">ELELENWO ROAD</text><text x="756" y="193">PORT HARCOURT</text></g>
+  <g transform="translate(605 354)"><path d="M0-52C-34-52-55-27-55 5c0 40 55 93 55 93S55 45 55 5C55-27 34-52 0-52Z" fill="#174c3b"/><circle cy="3" r="15" fill="#fff"/><circle cy="3" r="5" fill="#174c3b"/><rect x="-75" y="116" width="150" height="33" fill="#fff"/><text x="0" y="138" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2" fill="#174c3b">DE PALMS</text></g>
+</svg>

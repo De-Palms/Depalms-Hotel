@@ -1,0 +1,1 @@
+(() => { if (!window.Lenis || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const lenis = new Lenis({ lerp: .09, smoothWheel: true }); lenis.on('scroll', () => window.ScrollTrigger && ScrollTrigger.update()); const raf = (time) => { lenis.raf(time); requestAnimationFrame(raf); }; requestAnimationFrame(raf); })();

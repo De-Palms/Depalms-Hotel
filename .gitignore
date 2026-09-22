@@ -1,0 +1,28 @@
+# Dependencies & Build Output
+node_modules/
+.next/
+dist/
+build/
+
+# Editor & Tooling
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# AI & Workspace Config
+.agents/
+.gemini/
+CLAUDE.md
+AGENTS.md
+
+# Reference Documents & Build Notes
+websitebuildinstructions.md
+*.tsbuildinfo
+
+# Logs & OS Files
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.*
