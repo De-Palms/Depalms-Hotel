@@ -20,7 +20,10 @@
     const hasVideo = Boolean(room.video);
 
     if (hasImage && hasVideo) {
-      mediaContent = `<div class="room-media has-image"><img class="room-img" src="${room.image}" alt="${room.name}" loading="lazy"><video class="room-video" muted loop playsinline preload="metadata"><source src="${room.video}" type="video/mp4"></video><span class="room-index">0${index + 1}</span><button class="room-video-btn" type="button" data-video-toggle aria-label="Watch video tour of ${room.name}"><span class="video-btn-icon" aria-hidden="true">▶</span><span class="video-btn-text">Watch tour</span></button></div>`;
+      const allImages = room.gallery ? [room.image, ...room.gallery] : [room.image];
+      const hasGallery = allImages.length > 1;
+      const imgsMarkup = allImages.map((src, i) => `<img class="room-img${i > 0 ? ' room-img--hidden' : ''}" src="${src}" alt="${room.name}${i > 0 ? ' \u2013 view ' + (i + 1) : ''}" loading="lazy">`).join('');
+      mediaContent = `<div class="room-media has-image${hasGallery ? ' has-gallery' : ''}">${imgsMarkup}<video class="room-video" muted loop playsinline preload="metadata"><source src="${room.video}" type="video/mp4"></video><span class="room-index">0${index + 1}</span><button class="room-video-btn" type="button" data-video-toggle aria-label="Watch video tour of ${room.name}"><span class="video-btn-icon" aria-hidden="true">▶</span><span class="video-btn-text">Watch tour</span></button></div>`;
     } else if (hasVideo) {
       mediaContent = `<div class="room-media"><video class="room-video" muted loop playsinline preload="metadata"><source src="${room.video}" type="video/mp4"></video><span class="room-index">0${index + 1}</span><button class="room-video-btn" type="button" data-video-toggle aria-label="Watch video tour of ${room.name}"><span class="video-btn-icon" aria-hidden="true">▶</span><span class="video-btn-text">Watch tour</span></button></div>`;
     } else if (hasImage) {
@@ -79,7 +82,20 @@
     });
   });
 
-  document.querySelector('[data-reviews]').innerHTML = data.reviews.map((review, index) => `<article class="review"><div class="review-top"><span>Guest review placeholder / 0${index + 1}</span><span aria-hidden="true">“</span></div><p>"${review.quote}"</p><small>${review.note}</small></article>`).join('');
+  // Gallery auto-cycle for rooms with multiple images
+  document.querySelectorAll('.room-media.has-gallery').forEach((media) => {
+    const imgs = media.querySelectorAll('.room-img');
+    if (imgs.length < 2) return;
+    let current = 0;
+    setInterval(() => {
+      imgs[current].classList.add('room-img--hidden');
+      current = (current + 1) % imgs.length;
+      imgs[current].classList.remove('room-img--hidden');
+    }, 2000);
+  });
+
+  function renderStars(rating) { let s = ''; for (let i = 1; i <= 5; i++) s += `<span class="review-star${i <= rating ? ' is-filled' : ''}" aria-hidden="true">★</span>`; return s; }
+  document.querySelector('[data-reviews]').innerHTML = data.reviews.map((review) => `<article class="review"><div class="review-top"><span>${review.author} · ${review.rating}/5</span><span class="review-stars" aria-label="${review.rating} out of 5 stars">${renderStars(review.rating)}</span></div><p>"${review.quote}"</p><small>${review.timeAgo} on ${review.source}</small></article>`).join('');
   document.querySelector('[data-places]').innerHTML = data.placesToVisit.map((place, index) => `<article class="place"><div class="place-art"><img src="${place.image}" alt="${place.name}" loading="lazy"><span class="place-city">Port Harcourt / 0${index + 1}</span><span class="place-number">0${index + 1}</span></div><div class="place-meta"><p class="place-type">${place.type}</p><h3>${place.name}</h3><p class="lede">${place.detail}</p></div></article>`).join('');
   document.querySelector('[data-contact]').innerHTML = `<a class="contact-detail" href="${directions}" target="_blank" rel="noreferrer"><strong>01</strong><span>${hotel.address}</span></a><a class="contact-detail" href="tel:+2349153111592"><strong>02</strong><span>${hotel.phone}</span></a><a class="contact-detail" href="mailto:${hotel.email}"><strong>03</strong><span>${hotel.email}</span></a><a class="contact-detail" href="${hotel.instagram}" target="_blank" rel="noreferrer"><strong>04</strong><span>Instagram</span></a>`;
 })();

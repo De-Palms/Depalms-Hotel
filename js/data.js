@@ -6,12 +6,12 @@ window.siteData = {
     { name: "Royal Room", description: "A spacious, well-appointed room for an elevated stay.", details: "1 king-size bed", video: "assets/rooms/royalroom.mp4", features: ["1 King Bed", "Hot Shower", "Fast Wi-Fi", "Netflix", "Breakfast"] },
     { name: "Special Room", description: "A polished setting designed for unhurried rest.", details: "1 king-size bed", image: "assets/rooms/specialroom.webp", video: "assets/rooms/specialroom.mp4", features: ["1 King Bed", "Hot Shower", "Fast Wi-Fi", "Netflix", "Breakfast"] },
     { name: "Ambassadorial Room", description: "A considered room category, with imagery to be supplied by De Palms.", details: "1 king-size bed", features: ["1 King Bed", "Hot Shower", "Fast Wi-Fi", "Netflix", "Breakfast"] },
-    { name: "Presidential Suite", description: "A generous suite for a more expansive stay.", details: "Optional One or Two bedrooms and a sitting room", features: ["1–2 Bedrooms", "Hot Shower & Bath", "Fast Wi-Fi", "Netflix", "Breakfast"] }
+    { name: "Presidential Suite", description: "A generous suite for a more expansive stay.", details: "Optional One or Two bedrooms and a sitting room", image: "assets/rooms/presidentialroom.webp", video: "assets/rooms/presidentsuite.mp4", gallery: ["assets/rooms/Presidentialliving.webp"], features: ["1–2 Bedrooms", "Hot Shower & Bath", "Fast Wi-Fi", "Netflix", "Breakfast"] }
   ],
   reviews: [
-    { quote: "Verified guest feedback will appear here.", note: "A considered stay, in a guest's own words." },
-    { quote: "Add a real review, rating and source before publishing.", note: "Thoughtful service deserves a thoughtful record." },
-    { quote: "A guest story will bring this space to life.", note: "Content awaiting verification." }
+    { author: "Joshua Obiabo Ehoche", rating: 4, timeAgo: "4 years ago", source: "Google", quote: "Very lovely rooms. Clean bathrooms and comfortable amenities. Staff are good too and I enjoyed my dinner tremendously. Had the seafood okra. Nice serene location and beautiful artworks." },
+    { author: "Michael A", rating: 4, timeAgo: "2 years ago", source: "Google", quote: "For a Port Harcourt standard, it ranks well in ambience and service. Great and friendly staff members too. Breakfast buffet however finishes early and I had to wait for a refill before I could eat." },
+    { author: "Kelechi Wamah", rating: 4, timeAgo: "2 years ago", source: "Google", quote: "De Palm is a well managed hotel. Everything works as it should. Rooms are lovely and very homely. I got the desired rest that was needed." }
   ],
   placesToVisit: [
     { name: "Port Harcourt Pleasure Park", type: "Open-air recreation", detail: "Green space, family time and a change of pace.", image: "assets/places/pleasurepack.jpg" },
