@@ -51,4 +51,13 @@
       scrollTrigger: { trigger: contactSection, start: 'top 75%', once: true }
     });
   }
+
+  /* Sort and refresh ScrollTrigger to ensure pins are in exact DOM sequence */
+  ScrollTrigger.sort();
+  ScrollTrigger.refresh();
+
+  window.addEventListener('load', () => {
+    ScrollTrigger.sort();
+    ScrollTrigger.refresh();
+  });
 })();
