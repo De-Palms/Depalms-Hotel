@@ -5,6 +5,6 @@
   "description": "Static HTML, CSS and JavaScript website for De Palms Hotels",
   "scripts": {
     "start": "npx serve .",
-    "check": "node --check js/data.js && node --check js/navigation.js && node --check js/smooth-scroll.js && node --check js/hero.js && node --check js/animations.js && node --check js/main.js"
+    "check": "node --check js/data.js && node --check js/navigation.js && node --check js/smooth-scroll.js && node --check js/hero.js && node --check js/animations.js && node --check js/main.js && node --check js/chat.js"
   }
 }
