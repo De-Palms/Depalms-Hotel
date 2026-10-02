@@ -20,7 +20,20 @@
         yOffset: 20
       }
     },
-    zIndex: 25 // Keeps widget neatly below sticky site-header (z-index: 30)
+    zIndex: 1000 // Elevated above sticky site-header (z-index: 30) so controls are never obscured
+  };
+
+  // State synchronization: hide site-header on mobile when chat is opened so logo & menu toggle don't intercept taps
+  window.Tawk_API.onChatMaximized = function () {
+    document.body.classList.add('is-chat-maximized');
+  };
+
+  window.Tawk_API.onChatMinimized = function () {
+    document.body.classList.remove('is-chat-maximized');
+  };
+
+  window.Tawk_API.onChatHidden = function () {
+    document.body.classList.remove('is-chat-maximized');
   };
 
   // Ensure widget is hidden if the mobile menu happens to be open when chat finishes loading
