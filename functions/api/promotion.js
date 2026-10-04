@@ -35,9 +35,21 @@ function pemToArrayBuffer(pem) {
   return buffer;
 }
 
+async function getServerTimestamp() {
+  try {
+    const head = await fetch('https://oauth2.googleapis.com', { method: 'HEAD' });
+    const sDate = head.headers.get('date');
+    if (sDate) {
+      const parsed = Math.floor(new Date(sDate).getTime() / 1000);
+      if (!isNaN(parsed) && parsed > 0) return parsed;
+    }
+  } catch (_) {}
+  return Math.floor(Date.now() / 1000);
+}
+
 async function getAccessToken(email, rawPrivateKey) {
   const header = { alg: 'RS256', typ: 'JWT' };
-  const now = Math.floor(Date.now() / 1000);
+  const now = await getServerTimestamp();
   const payload = {
     iss: email,
     scope: 'https://www.googleapis.com/auth/spreadsheets.readonly',
@@ -204,11 +216,19 @@ export async function onRequestGet({ env }) {
 
   try {
     const token = await getAccessToken(email, privateKey);
-    const range = encodeURIComponent('Promotions!A:O');
-    const response = await fetch(
+    let range = encodeURIComponent('Promotions!A:O');
+    let response = await fetch(
       `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?valueRenderOption=UNFORMATTED_VALUE`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
+    if (!response.ok) {
+      // Fallback to Events tab if Promotions tab is not found
+      range = encodeURIComponent('Events!A:O');
+      response = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?valueRenderOption=UNFORMATTED_VALUE`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    }
     if (!response.ok) throw new Error(`Google Sheets read failed: ${response.status}`);
     const data = await response.json();
     const promotion = selectPromotion(data.values);
