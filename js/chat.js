@@ -1,76 +1,578 @@
 /**
- * De Palms Hotels - Tawk.to Live Chat Integration
- * Fully customized offsets, mobile drawer synchronization, and brand aesthetic harmony.
+ * ══════════════════════════════════════════════════════════════
+ * DE PALMS HOTEL — AI CONCIERGE CHAT WIDGET
+ * WhatsApp-Inspired Luxury UI with Gemini 3.1 Flash Lite
+ * ──────────────────────────────────────────────────────────────
+ * • Strictly isolates wheel & touch scroll to the chat area
+ * • WhatsApp bubble styling in De Palms Hotel design language
+ * • Floating greeting card notification on visit
+ * • 30-minute session persistence across page reloads
+ * • Natural, human-like concierge conversational flow
+ * • Multi-room booking calculations & Bank Account cards
+ * ══════════════════════════════════════════════════════════════
  */
 (() => {
-  window.Tawk_API = window.Tawk_API || {};
-  window.Tawk_LoadStart = new Date();
+  'use strict';
 
-  // Widget positioning, offsets and z-index to harmonize with site layout
-  window.Tawk_API.customStyle = {
-    visibility: {
-      desktop: {
-        position: 'br', // bottom-right
-        xOffset: 24,    // 24px margin from right viewport edge
-        yOffset: 24     // 24px margin from bottom viewport edge
-      },
-      mobile: {
-        position: 'br',
-        xOffset: 16,
-        yOffset: 20
+  const API_ENDPOINT = '/api/chat';
+  const STORAGE_KEY = 'dp_chat_session_v2';
+  const SESSION_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
+
+  /* ─── State ─────────────────────────────────────────────── */
+
+  let chatHistory = [];
+  let isWaiting = false;
+  let isOpen = false;
+  let greetPopTimer = null;
+
+  /* ─── SVG Icons ─────────────────────────────────────────── */
+
+  const ICON = {
+    // WhatsApp/Message Bubble Launcher Icon
+    chat: '<svg class="dp-icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
+    close: '<svg class="dp-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+    send: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+    restart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>',
+    phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+    whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.23 8.23 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.45 0-2.87-.38-4.12-1.1l-.3-.17-3.12.82.83-3.04-.19-.3a8.21 8.21 0 0 1-1.26-4.44c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.4-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.38-.44.12-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.4-.42-.56-.43h-.47c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.23.9 2.43 1.02 2.6.13.16 1.77 2.7 4.28 3.79.6.26 1.07.41 1.44.53.6.19 1.15.17 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/></svg>',
+    checkDouble: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L7 17l-5-5"/><path d="M22 10l-7.5 7.5-1.5-1.5"/></svg>',
+    conciergeBadge: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a9 9 0 0 1 9 9c0 4.1-2.8 7.6-6.6 8.7L12 22l-2.4-2.3C5.8 18.6 3 15.1 3 11a9 9 0 0 1 9-9z"/><circle cx="12" cy="10" r="3"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
+    copy: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+  };
+
+  /* ─── Helpers ────────────────────────────────────────────── */
+
+  function esc(text) {
+    const d = document.createElement('div');
+    d.textContent = text || '';
+    return d.innerHTML;
+  }
+
+  function timeStr() {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  /* ─── Session Persistence (30 Minutes) ───────────────────── */
+
+  function loadSavedSession() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      if (!data || !data.lastActive || !Array.isArray(data.history)) return null;
+
+      const elapsed = Date.now() - data.lastActive;
+      if (elapsed < SESSION_TIMEOUT_MS) {
+        return data;
       }
-    },
-    zIndex: 1000 // Elevated above sticky site-header (z-index: 30) so controls are never obscured
-  };
-
-  // State synchronization: hide site-header on mobile when chat is opened so logo & menu toggle don't intercept taps
-  window.Tawk_API.onChatMaximized = function () {
-    document.body.classList.add('is-chat-maximized');
-  };
-
-  window.Tawk_API.onChatMinimized = function () {
-    document.body.classList.remove('is-chat-maximized');
-  };
-
-  window.Tawk_API.onChatHidden = function () {
-    document.body.classList.remove('is-chat-maximized');
-  };
-
-  // Ensure widget is hidden if the mobile menu happens to be open when chat finishes loading
-  window.Tawk_API.onLoad = function () {
-    const mobileMenu = document.querySelector('[data-mobile-menu]');
-    if (mobileMenu && mobileMenu.classList.contains('is-open')) {
-      if (typeof window.Tawk_API.hideWidget === 'function') {
-        window.Tawk_API.hideWidget();
-      }
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      console.warn('[Session] Load error:', e);
     }
-  };
+    return null;
+  }
 
-  // Global helper function to trigger chat opening programmatically from any link/button
+  function saveCurrentSession() {
+    try {
+      const data = {
+        history: chatHistory,
+        lastActive: Date.now(),
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+      console.warn('[Session] Save error:', e);
+    }
+  }
+
+  /* ─── Inject Widget HTML ────────────────────────────────── */
+
+  function injectWidget() {
+    const root = document.createElement('div');
+    root.id = 'dp-chat-root';
+    root.setAttribute('data-lenis-prevent', 'true');
+
+    root.innerHTML = `
+      <!-- Floating Greeting Notification Popout -->
+      <div class="dp-greet-pop is-hidden" id="dp-greet-pop" role="alert">
+        <button class="dp-greet-close" id="dp-greet-close" aria-label="Close greeting">×</button>
+        <div class="dp-greet-body">
+          <div class="dp-greet-avatar">
+            ${ICON.conciergeBadge}
+            <div class="dp-avatar-pip"></div>
+          </div>
+          <div class="dp-greet-content">
+            <div class="dp-greet-title">De Palms Concierge</div>
+            <div class="dp-greet-msg">👋 Warm welcome to De Palms Hotel! How can we assist your stay in Port Harcourt today? Chat with our front desk.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Launcher Button with WhatsApp Message Icon -->
+      <button class="dp-launcher" id="dp-launcher" aria-label="Open De Palms Hotel Live Concierge Chat">
+        <div class="dp-launcher-pip" title="Online"></div>
+        ${ICON.chat}
+        ${ICON.close}
+      </button>
+
+      <!-- WhatsApp-Style Floating Chat Card -->
+      <div class="dp-card" id="dp-card" role="dialog" aria-modal="true" aria-label="De Palms Concierge Chat" data-lenis-prevent="true">
+
+        <!-- WhatsApp Header -->
+        <div class="dp-header">
+          <div class="dp-header-brand" id="dp-header-brand" title="De Palms Hotel Port Harcourt">
+            <div class="dp-header-avatar">
+              ${ICON.conciergeBadge}
+              <div class="dp-avatar-pip"></div>
+            </div>
+            <div class="dp-header-info">
+              <h3>De Palms Concierge</h3>
+              <p>online · Port Harcourt</p>
+            </div>
+          </div>
+          <div class="dp-header-actions">
+            <a href="tel:+2349153111592" class="dp-header-btn" title="Call Front Desk (+234 915 311 1592)">
+              ${ICON.phone}
+            </a>
+            <a href="https://wa.me/2349153111592?text=Hello%20De%20Palms%2C%20I%20would%20like%20to%20inquire%20about%20a%20reservation." target="_blank" rel="noopener noreferrer" class="dp-header-btn" title="Open in WhatsApp">
+              ${ICON.whatsapp}
+            </a>
+            <button class="dp-header-btn" id="dp-restart" title="Start fresh chat">
+              ${ICON.restart}
+            </button>
+            <button class="dp-header-btn" id="dp-minimize" title="Close chat">
+              ${ICON.close}
+            </button>
+          </div>
+        </div>
+
+        <!-- WhatsApp Message Stream -->
+        <div class="dp-messages" id="dp-messages" data-lenis-prevent="true">
+          <!-- Session date pill -->
+          <div class="dp-date-badge">
+            <span>DE PALMS CONCIERGE · LIVE</span>
+          </div>
+        </div>
+
+        <!-- WhatsApp Bottom Input Bar -->
+        <form class="dp-input-bar" id="dp-chat-form">
+          <input
+            type="text"
+            class="dp-chat-input"
+            id="dp-chat-input"
+            placeholder="Type a message..."
+            autocomplete="off"
+          />
+          <button type="submit" class="dp-send-btn" id="dp-send" title="Send message" aria-label="Send">
+            ${ICON.send}
+          </button>
+        </form>
+      </div>
+    `;
+
+    document.body.appendChild(root);
+  }
+
+  /* ─── DOM References ────────────────────────────────────── */
+
+  let $root, $launcher, $greetPop, $greetClose, $card;
+  let $minimize, $restart, $messages, $chatForm, $chatInput, $sendBtn;
+
+  function bindDOM() {
+    $root       = document.getElementById('dp-chat-root');
+    $launcher   = document.getElementById('dp-launcher');
+    $greetPop   = document.getElementById('dp-greet-pop');
+    $greetClose = document.getElementById('dp-greet-close');
+    $card       = document.getElementById('dp-card');
+    $minimize   = document.getElementById('dp-minimize');
+    $restart    = document.getElementById('dp-restart');
+    $messages   = document.getElementById('dp-messages');
+    $chatForm   = document.getElementById('dp-chat-form');
+    $chatInput  = document.getElementById('dp-chat-input');
+    $sendBtn    = document.getElementById('dp-send');
+  }
+
+  /* ─── Scroll Isolation Enforcement ──────────────────────── */
+
+  function setupScrollIsolation() {
+    if (!$card || !$messages) return;
+
+    // Strict wheel handler with passive: false to prevent background scroll
+    $card.addEventListener('wheel', (e) => {
+      e.stopPropagation();
+
+      const delta = e.deltaY;
+      const { scrollTop, scrollHeight, clientHeight } = $messages;
+      const maxScroll = scrollHeight - clientHeight;
+
+      if (maxScroll > 0) {
+        $messages.scrollTop += delta;
+      }
+
+      // Always prevent window/body from scrolling when mouse is over the chat
+      e.preventDefault();
+    }, { passive: false });
+
+    // Touch event isolation for mobile
+    $card.addEventListener('touchmove', (e) => {
+      e.stopPropagation();
+    }, { passive: true });
+  }
+
+  /* ─── Widget Toggle ─────────────────────────────────────── */
+
+  function toggleWidget(forceState) {
+    isOpen = typeof forceState === 'boolean' ? forceState : !isOpen;
+
+    if (isOpen) {
+      $card.classList.add('is-open');
+      $launcher.classList.add('is-open');
+      if ($greetPop) $greetPop.classList.add('is-hidden');
+      setTimeout(() => {
+        if ($chatInput) $chatInput.focus();
+        $messages.scrollTop = $messages.scrollHeight;
+      }, 200);
+    } else {
+      $card.classList.remove('is-open');
+      $launcher.classList.remove('is-open');
+    }
+  }
+
+  /* ─── Format Bank Accounts Card ─────────────────────────── */
+
+  function formatBankCardHtml() {
+    return `
+      <div class="dp-bank-card">
+        <div class="dp-bank-card-title">
+          🏦 De Palms Hotel Official Accounts
+        </div>
+        <div class="dp-bank-item">
+          <div class="dp-bank-name">1. Wema Bank</div>
+          <div class="dp-bank-acc">
+            <span>9379542204</span>
+            <button type="button" onclick="navigator.clipboard && navigator.clipboard.writeText('9379542204'); this.textContent='COPIED ✓'; setTimeout(()=>this.textContent='COPY', 2000);">COPY</button>
+          </div>
+          <div class="dp-bank-holder">Account Name: DePalms Hotel</div>
+        </div>
+        <div class="dp-bank-item">
+          <div class="dp-bank-name">2. Zenith Bank</div>
+          <div class="dp-bank-acc">
+            <span>1221641025</span>
+            <button type="button" onclick="navigator.clipboard && navigator.clipboard.writeText('1221641025'); this.textContent='COPIED ✓'; setTimeout(()=>this.textContent='COPY', 2000);">COPY</button>
+          </div>
+          <div class="dp-bank-holder">Account Name: De Palms Hotel Limited</div>
+        </div>
+      </div>
+    `;
+  }
+
+  /* ─── Voucher Card HTML ─────────────────────────────────── */
+
+  function buildVoucher(b) {
+    return `
+      <div class="dp-voucher">
+        <div class="dp-voucher-header">
+          <span class="dp-voucher-brand">🛎️ De Palms Reservation</span>
+          <span class="dp-voucher-ref">${esc(b.bookingId)}</span>
+        </div>
+        <div class="dp-voucher-grid">
+          <div class="dp-voucher-item">
+            <div class="dp-voucher-label">Guest</div>
+            <div class="dp-voucher-val">${esc(b.guestName)}</div>
+          </div>
+          <div class="dp-voucher-item">
+            <div class="dp-voucher-label">Room Category</div>
+            <div class="dp-voucher-val dp-voucher-val--room">${esc(b.roomType)}</div>
+          </div>
+          <div class="dp-voucher-item">
+            <div class="dp-voucher-label">Total Bill</div>
+            <div class="dp-voucher-val" style="color:#174c3b;font-weight:700;">${esc(b.totalBill || 'N/A')}</div>
+          </div>
+          <div class="dp-voucher-item">
+            <div class="dp-voucher-label">Payment Preference</div>
+            <div class="dp-voucher-val">${esc(b.paymentPreference || 'Pending')}</div>
+          </div>
+          <div class="dp-voucher-item">
+            <div class="dp-voucher-label">Check-In</div>
+            <div class="dp-voucher-val">${esc(b.checkIn)}</div>
+          </div>
+          <div class="dp-voucher-item">
+            <div class="dp-voucher-label">Check-Out</div>
+            <div class="dp-voucher-val">${esc(b.checkOut)}</div>
+          </div>
+          ${b.inquirySummary ? `
+          <div class="dp-voucher-item dp-voucher-item--full">
+            <div class="dp-voucher-label">Inquiry Summary / Notes</div>
+            <div class="dp-voucher-val" style="font-size:0.75rem;color:rgba(21,24,21,0.7);">${esc(b.inquirySummary)}</div>
+          </div>` : ''}
+        </div>
+        <div class="dp-voucher-footer">
+          ${ICON.check}
+          <span>Logged to Google Sheets · Front Desk notified</span>
+        </div>
+      </div>
+    `;
+  }
+
+  /* ─── Message Rendering ─────────────────────────────────── */
+
+  function appendMessage(role, text, extraHtml, customTime) {
+    const isUser = role === 'user';
+    const div = document.createElement('div');
+    div.className = `dp-msg dp-msg--${isUser ? 'user' : 'ai'}`;
+
+    const displayTime = customTime || timeStr();
+    const ticksHtml = isUser
+      ? `<span class="dp-bubble-ticks" title="Delivered">${ICON.checkDouble}</span>`
+      : '';
+
+    // Check if AI response contains bank details mention to show the clean bank card
+    let bankCardHtml = '';
+    if (!isUser && (text.includes('9379542204') || text.includes('1221641025') || (text.includes('Wema Bank') && text.includes('Zenith Bank')))) {
+      bankCardHtml = formatBankCardHtml();
+    }
+
+    div.innerHTML = `
+      <div class="dp-msg-bubble">
+        <div class="dp-bubble-text">${esc(text).replace(/\n/g, '<br>')}</div>
+        ${bankCardHtml}
+        ${extraHtml || ''}
+        <div class="dp-bubble-meta">
+          <span>${displayTime}</span>
+          ${ticksHtml}
+        </div>
+      </div>
+    `;
+
+    $messages.appendChild(div);
+    $messages.scrollTop = $messages.scrollHeight;
+  }
+
+  /* ─── Typing Indicator ──────────────────────────────────── */
+
+  let typingEl = null;
+
+  function showTyping() {
+    if (typingEl) return;
+    typingEl = document.createElement('div');
+    typingEl.className = 'dp-typing-bubble';
+    typingEl.innerHTML = `
+      <div class="dp-typing-dot"></div>
+      <div class="dp-typing-dot"></div>
+      <div class="dp-typing-dot"></div>
+      <span class="dp-typing-text">Concierge is typing…</span>
+    `;
+    $messages.appendChild(typingEl);
+    $messages.scrollTop = $messages.scrollHeight;
+  }
+
+  function hideTyping() {
+    if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
+    typingEl = null;
+  }
+
+  /* ─── Conversation Initialization ───────────────────────── */
+
+  function initConversation() {
+    $messages.innerHTML = `
+      <div class="dp-date-badge">
+        <span>DE PALMS CONCIERGE · LIVE</span>
+      </div>
+    `;
+
+    const saved = loadSavedSession();
+    if (saved && saved.history && saved.history.length > 0) {
+      chatHistory = saved.history;
+      for (const turn of chatHistory) {
+        appendMessage(turn.role, turn.content, turn.voucherHtml, turn.time);
+      }
+      return;
+    }
+
+    // Fresh welcome message
+    const welcome = 'Warm welcome to De Palms Hotel Port Harcourt! 🛎️\n\nI am your front-desk concierge. Feel free to ask about our room suites, dining, amenities, or make a reservation. How may I assist you today?';
+    const initTime = timeStr();
+    appendMessage('assistant', welcome, '', initTime);
+    chatHistory = [{ role: 'assistant', content: welcome, time: initTime }];
+    saveCurrentSession();
+  }
+
+  /* ─── Send Message ──────────────────────────────────────── */
+
+  async function sendMessage() {
+    const text = $chatInput.value.trim();
+    if (!text || isWaiting) return;
+
+    $chatInput.value = '';
+    $chatInput.disabled = true;
+    $sendBtn.disabled = true;
+    isWaiting = true;
+
+    const userTime = timeStr();
+    appendMessage('user', text, '', userTime);
+    chatHistory.push({ role: 'user', content: text, time: userTime });
+    saveCurrentSession();
+
+    showTyping();
+
+    try {
+      const res = await fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: text,
+          history: chatHistory.map(m => ({ role: m.role, content: m.content })).slice(-16),
+        }),
+      });
+
+      if (!res.ok) throw new Error(`Server returned ${res.status}`);
+
+      const data = await res.json();
+      hideTyping();
+
+      let voucherHtml = '';
+      if (data.bookingSaved && data.bookingDetails) {
+        voucherHtml = buildVoucher(data.bookingDetails);
+      }
+
+      const reply = data.reply || 'Thank you. Our front desk remains at your complete disposal.';
+      const aiTime = timeStr();
+      appendMessage('assistant', reply, voucherHtml, aiTime);
+
+      chatHistory.push({
+        role: 'assistant',
+        content: reply,
+        voucherHtml,
+        time: aiTime,
+      });
+
+      saveCurrentSession();
+    } catch (err) {
+      hideTyping();
+      console.error('[De Palms Chat]', err);
+      const errTime = timeStr();
+      appendMessage(
+        'assistant',
+        'I apologize, but I am momentarily having trouble connecting to our reservations system. Please call our front desk directly at +234 915 311 1592 or chat with us on WhatsApp.',
+        '',
+        errTime
+      );
+    } finally {
+      isWaiting = false;
+      $chatInput.disabled = false;
+      $sendBtn.disabled = false;
+      $chatInput.focus();
+    }
+  }
+
+  /* ─── Greeting Popout Notification ────────────────────────── */
+
+  function triggerGreetingNotification() {
+    greetPopTimer = setTimeout(() => {
+      // Only pop out if chat hasn't been opened yet
+      if (!isOpen && $greetPop) {
+        $greetPop.classList.remove('is-hidden');
+      }
+    }, 2500);
+  }
+
+  /* ─── Event Wiring ──────────────────────────────────────── */
+
+  function wireEvents() {
+    // Launcher toggle
+    $launcher.addEventListener('click', () => toggleWidget());
+    $minimize.addEventListener('click', () => toggleWidget(false));
+
+    // Greeting popout click: open chat
+    if ($greetPop) {
+      $greetPop.addEventListener('click', (e) => {
+        if (e.target && e.target.id === 'dp-greet-close') return;
+        toggleWidget(true);
+      });
+    }
+
+    if ($greetClose) {
+      $greetClose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if ($greetPop) $greetPop.classList.add('is-hidden');
+      });
+    }
+
+    // Restart conversation
+    $restart.addEventListener('click', () => {
+      if (confirm('Start a fresh conversation with De Palms front desk?')) {
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+        } catch (_) {}
+        chatHistory = [];
+        initConversation();
+      }
+    });
+
+    // Chat form submit
+    $chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      sendMessage();
+    });
+
+    // Click outside to close (desktop only)
+    document.addEventListener('click', (e) => {
+      if (!isOpen) return;
+      if ($root && !$root.contains(e.target)) {
+        toggleWidget(false);
+      }
+    });
+
+    // Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen) toggleWidget(false);
+    });
+  }
+
+  /* ─── Global openLiveChat trigger ───────────────────────── */
+
   window.openLiveChat = function (event) {
     if (event && event.preventDefault) event.preventDefault();
-    if (window.Tawk_API && typeof window.Tawk_API.maximize === 'function') {
-      window.Tawk_API.maximize();
-    }
+    toggleWidget(true);
   };
 
-  // Wire up any elements marked with [data-open-chat]
-  document.addEventListener('DOMContentLoaded', () => {
+  function wireOpenChatTriggers() {
     document.querySelectorAll('[data-open-chat]').forEach((el) => {
       el.addEventListener('click', window.openLiveChat);
     });
-  });
+  }
 
-  // Asynchronously inject the Tawk.to embed script
-  const s1 = document.createElement('script');
-  const s0 = document.getElementsByTagName('script')[0];
-  s1.async = true;
-  s1.src = 'https://embed.tawk.to/6abfba2fdf2d5634c099c11d/1k3ueuio9';
-  s1.charset = 'UTF-8';
-  s1.setAttribute('crossorigin', '*');
-  if (s0 && s0.parentNode) {
-    s0.parentNode.insertBefore(s1, s0);
+  /* ─── Mobile Menu Sync ──────────────────────────────────── */
+
+  function syncMobileMenu() {
+    const mobileMenu = document.querySelector('[data-mobile-menu]');
+    if (!mobileMenu) return;
+
+    const observer = new MutationObserver(() => {
+      if ($root) {
+        $root.style.display = mobileMenu.classList.contains('is-open') ? 'none' : '';
+      }
+    });
+
+    observer.observe(mobileMenu, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  /* ─── Initialize ────────────────────────────────────────── */
+
+  function init() {
+    injectWidget();
+    bindDOM();
+    setupScrollIsolation();
+    wireEvents();
+    wireOpenChatTriggers();
+    syncMobileMenu();
+    initConversation();
+    triggerGreetingNotification();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    document.head.appendChild(s1);
+    init();
   }
 })();

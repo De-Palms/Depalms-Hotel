@@ -1,0 +1,20 @@
+# Cloudflare Pages local development secrets
+# Copy this file to .dev.vars and fill in your actual credentials.
+# These are injected as env vars by `wrangler pages dev`.
+# For production, set these in Cloudflare Dashboard > Pages > Settings > Environment variables.
+
+# ── Gemini 2.5 Flash API Key ──────────────────────────────
+GEMINI_API_KEY="AIzaSy-YourGeminiApiKeyHere"
+
+# ── Google Sheets Master Log ──────────────────────────────
+GOOGLE_SHEET_ID="YourGoogleSheetIdHere"
+GOOGLE_SERVICE_ACCOUNT_EMAIL="depalms-booking-logger@your-project.iam.gserviceaccount.com"
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEv...\n-----END PRIVATE KEY-----\n"
+
+# ── Email Alerts (Optional — Resend.com) ──────────────────
+# Sign up at https://resend.com, verify your domain, and paste API key.
+# If not set, email dispatch is simulated and bookings are logged to Google Sheets only.
+# RESEND_API_KEY="re_YourResendApiKeyHere"
+
+# ── Reception Inbox ──────────────────────────────────────
+RECEPTION_EMAIL="depalmshotelphc@gmail.com"

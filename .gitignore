@@ -26,3 +26,9 @@ websitebuildinstructions.md
 Thumbs.db
 .env
 .env.*
+
+# Cloudflare Secrets & Cache
+.dev.vars
+.wrangler/
+secretes.md
+secrets.md
