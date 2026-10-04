@@ -1,0 +1,108 @@
+/* ─── De Palms dynamic promotions ─────────────────────────── */
+
+.promotion {
+  background: var(--mist);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.promotion-shell {
+  display: grid;
+  gap: 34px;
+}
+
+.promotion-heading {
+  max-width: 22ch;
+  margin: 13px 0 0;
+  font-size: clamp(3.6rem, 10vw, 6.6rem);
+}
+
+.promotion-layout {
+  display: grid;
+  gap: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.promotion-details {
+  margin: 0;
+  color: var(--green);
+  font: 500 .62rem/1.55 var(--mono);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.promotion-copy .lede {
+  max-width: 40rem;
+  margin-top: 16px;
+}
+
+.promotion-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 23px;
+}
+
+.promotion-pricing {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--green);
+}
+
+.promotion-price {
+  font: 400 clamp(2rem, 8vw, 3.15rem)/.9 var(--display);
+  letter-spacing: -.04em;
+}
+
+.promotion-old-price {
+  color: rgba(21, 24, 21, .48);
+  font: 500 .66rem var(--mono);
+  letter-spacing: .08em;
+  text-decoration: line-through;
+}
+
+.promotion-cta[hidden],
+.promotion-details[hidden],
+.promotion-pricing[hidden] {
+  display: none;
+}
+
+.promotion:not(.promotion--has-action) .promotion-action {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .promotion-shell {
+    grid-template-columns: minmax(0, 1.4fr) minmax(220px, .6fr);
+    align-items: end;
+    gap: 8vw;
+  }
+
+  .promotion-intro {
+    grid-column: 1 / -1;
+  }
+
+  .promotion-layout {
+    display: contents;
+  }
+
+  .promotion-copy {
+    grid-column: 1;
+  }
+
+  .promotion-action {
+    grid-column: 2;
+    align-self: end;
+    padding: 0 0 6px 28px;
+    border-left: 1px solid var(--line);
+  }
+
+  .promotion:not(.promotion--has-action) .promotion-copy {
+    grid-column: 1 / -1;
+    max-width: 46rem;
+  }
+
+}

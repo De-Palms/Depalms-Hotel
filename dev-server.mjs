@@ -14,6 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { onRequestPost } from './functions/api/chat.js';
+import { onRequestGet as onPromotionRequestGet } from './functions/api/promotion.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -115,7 +116,30 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // 2. Static File Serving
+  // 2. API Route: /api/promotion
+  if (pathname === '/api/promotion' && req.method === 'GET') {
+    try {
+      const webRequest = new Request(urlObj.toString(), {
+        method: 'GET',
+        headers: req.headers,
+      });
+      const cfResponse = await onPromotionRequestGet({ request: webRequest, env });
+      const resBody = await cfResponse.arrayBuffer();
+      const headers = { ...corsHeaders };
+      cfResponse.headers.forEach((value, key) => {
+        headers[key] = value;
+      });
+      res.writeHead(cfResponse.status, headers);
+      res.end(Buffer.from(resBody));
+    } catch (err) {
+      console.error('[dev-server] /api/promotion handler error:', err);
+      res.writeHead(503, { ...corsHeaders, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+      res.end(JSON.stringify({ active: false }));
+    }
+    return;
+  }
+
+  // 3. Static File Serving
   if (pathname === '/') pathname = '/index.html';
   if (!path.extname(pathname) && fs.existsSync(path.join(__dirname, `${pathname}.html`))) {
     pathname = `${pathname}.html`;
@@ -170,6 +194,7 @@ server.listen(PORT, () => {
   console.log(`══════════════════════════════════════════════════════════════`);
   console.log(`  ➜ Local:          http://localhost:${PORT}`);
   console.log(`  ➜ Chat API:       http://localhost:${PORT}/api/chat`);
+  console.log(`  ➜ Promotions API: http://localhost:${PORT}/api/promotion`);
   console.log(`  ➜ AI Engine:      ${modelName}`);
   console.log(`  ➜ Google Sheets:  ${env.GOOGLE_SHEET_ID ? 'Configured & Active' : 'Not configured'}`);
   console.log(`  ➜ Reception:      ${env.RECEPTION_EMAIL || 'Not configured'}`);

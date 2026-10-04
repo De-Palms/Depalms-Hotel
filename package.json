@@ -8,6 +8,6 @@
     "start": "node dev-server.mjs",
     "dev": "node dev-server.mjs",
     "dev:cf": "npx wrangler pages dev . --port 8788",
-    "check": "node --check js/data.js && node --check js/navigation.js && node --check js/smooth-scroll.js && node --check js/hero.js && node --check js/animations.js && node --check js/main.js && node --check js/chat.js && node --check functions/api/chat.js"
+    "check": "node --check js/data.js && node --check js/navigation.js && node --check js/smooth-scroll.js && node --check js/hero.js && node --check js/animations.js && node --check js/main.js && node --check js/chat.js && node --check js/promotion.js && node --check functions/api/chat.js && node --check functions/api/promotion.js && node --test tests/promotion.test.mjs"
   }
 }

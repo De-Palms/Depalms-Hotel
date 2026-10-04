@@ -21,6 +21,7 @@
     rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/promotion.css">
   <link rel="stylesheet" href="css/chat-widget.css">
   <title>De Palms Hotels | Where Elegance Belongs</title>
 </head>
@@ -91,6 +92,28 @@
       </div>
       <div class="marquee marquee--reverse" aria-hidden="true">
         <div class="marquee-track" data-marquee></div>
+      </div>
+    </section>
+
+    <section class="promotion section promotion--has-action" id="promotion" data-promotion aria-labelledby="promotion-title" aria-busy="true">
+      <div class="shell promotion-shell">
+        <div class="promotion-intro">
+          <p class="kicker" data-promotion-label>Experience De Palms</p>
+          <h2 class="display promotion-heading" id="promotion-title" data-promotion-title>Comfort, relaxation and exceptional hospitality.</h2>
+        </div>
+        <div class="promotion-layout">
+          <div class="promotion-copy">
+            <p class="promotion-details" data-promotion-details hidden></p>
+            <p class="lede" data-promotion-description>In the heart of Port Harcourt, every stay is shaped around calm, thoughtful comfort and warm hospitality.</p>
+          </div>
+          <div class="promotion-action">
+            <div class="promotion-pricing" data-promotion-pricing hidden>
+              <span class="promotion-price" data-promotion-price></span>
+              <span class="promotion-old-price" data-promotion-old-price hidden></span>
+            </div>
+            <a class="button promotion-cta" href="#rooms" data-promotion-cta>Explore our rooms <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -211,6 +234,7 @@
   <script src="js/smooth-scroll.js"></script>
   <script src="js/hero.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/promotion.js"></script>
   <script src="js/spaces.js"></script>
   <script src="js/animations.js"></script>
   <script src="js/chat.js"></script>
