@@ -1,21 +1,26 @@
 /* ══════════════════════════════════════════════════════════════
    DE PALMS HOTEL — AI CONCIERGE CHAT WIDGET
-   Architectural & Boxy Design Language (Matching De Palms Website)
+   Architectural & Boxy Design Language (Matching Reference Mockup)
    • Strict border-radius: 0 across all elements
-   • Generous padding and margins (nothing hugs the card edges)
-   • Strict scroll isolation (overscroll-behavior: contain)
-   • De Palms Hotel palette & typography
+   • Millimeter / blueprint graph grid background
+   • Generous container padding (eliminates left edge hugging)
+   • White message cards with dark green vertical left accent bar
+   • Reference number tag pills ([DP-XXXXXX])
+   • Crisp 2x2 reservation voucher (without internal logging footer)
+   • Quick action suggestion chips above input bar
+   • Attachment button, send button, and micro-text subtext footer
+   • Graceful fallback card linking to WhatsApp and direct call
    ══════════════════════════════════════════════════════════════ */
 
 /* ─── Widget Root Container ───────────────────────────────── */
 
 #dp-chat-root {
   position: fixed;
-  bottom: 28px;
-  right: 28px;
+  bottom: 24px;
+  right: 24px;
   z-index: 1000;
-  font-family: var(--sans);
-  color: var(--ink);
+  font-family: var(--sans, 'DM Sans', Arial, sans-serif);
+  color: var(--ink, #151815);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -25,15 +30,15 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  border-radius: 0 !important;
 }
 
 /* ─── Boxy Launcher Button ────────────────────────────────── */
 
 .dp-launcher {
-  width: 60px;
-  height: 60px;
-  border-radius: 0 !important;
-  background: var(--green);
+  width: 58px;
+  height: 58px;
+  background: var(--green, #174c3b);
   border: 1px solid rgba(255, 255, 255, 0.35);
   box-shadow: 0 12px 32px -4px rgba(23, 76, 59, 0.45),
               0 2px 10px rgba(0, 0, 0, 0.15);
@@ -48,10 +53,10 @@
 }
 
 .dp-launcher:hover {
-  background: #0f382b;
+  background: #0d2e23;
   transform: translateY(-2px);
   box-shadow: 0 16px 36px -4px rgba(23, 76, 59, 0.55),
-              0 0 0 1px var(--green);
+              0 0 0 1px var(--green, #174c3b);
 }
 
 .dp-launcher:active {
@@ -68,16 +73,15 @@
 .dp-launcher.is-open .dp-icon-chat { display: none; }
 .dp-launcher:not(.is-open) .dp-icon-close { display: none; }
 
-/* Boxy online status indicator */
+/* Boxy online status indicator on launcher */
 .dp-launcher-pip {
   position: absolute;
   top: 4px;
   right: 4px;
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   background: #10b981;
-  border: 1.5px solid var(--green);
-  border-radius: 0 !important;
+  border: 1.5px solid var(--green, #174c3b);
 }
 
 .dp-launcher-pip::after {
@@ -85,7 +89,6 @@
   position: absolute;
   inset: -3px;
   background: rgba(16, 185, 129, 0.4);
-  border-radius: 0 !important;
   animation: dpPulseBox 2.4s infinite;
 }
 
@@ -95,19 +98,18 @@
   100% { transform: scale(2.2); opacity: 0; }
 }
 
-/* ─── Boxy Greeting Popout Notification ───────────────────── */
+/* ─── Boxy Greeting Notification Popout ───────────────────── */
 
 .dp-greet-pop {
   position: absolute;
-  right: 76px;
-  bottom: 4px;
+  right: 74px;
+  bottom: 2px;
   width: 320px;
   background: #fff;
-  border-radius: 0 !important;
   box-shadow: 0 16px 40px -8px rgba(21, 24, 21, 0.22),
               0 4px 14px rgba(21, 24, 21, 0.08);
-  border: 1px solid var(--line);
-  padding: 18px 20px;
+  border: 1px solid rgba(21, 24, 21, 0.15);
+  padding: 16px 18px;
   cursor: pointer;
   transition: all 0.25s ease;
   animation: dpPopIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -117,7 +119,6 @@
 .dp-greet-pop:hover {
   transform: translateY(-2px);
   border-color: rgba(23, 76, 59, 0.4);
-  box-shadow: 0 20px 44px -8px rgba(21, 24, 21, 0.28);
 }
 
 .dp-greet-pop.is-hidden {
@@ -126,37 +127,35 @@
 
 .dp-greet-close {
   position: absolute;
-  top: 10px;
-  right: 12px;
+  top: 8px;
+  right: 10px;
   background: none;
   border: none;
   font-size: 18px;
   line-height: 1;
   color: rgba(21, 24, 21, 0.45);
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 0 !important;
+  padding: 4px 6px;
   transition: color 0.15s, background 0.15s;
 }
 
 .dp-greet-close:hover {
-  color: var(--ink);
-  background: var(--mist);
+  color: var(--ink, #151815);
+  background: #f7f8f5;
 }
 
 .dp-greet-body {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
+  gap: 12px;
 }
 
 .dp-greet-avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 0 !important;
-  background: var(--green);
+  width: 36px;
+  height: 36px;
+  background: #0e3225;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
+  color: #e2bf7d;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,11 +172,10 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   background: #10b981;
-  border: 1.5px solid #fff;
-  border-radius: 0 !important;
+  border: 1px solid #0e3225;
 }
 
 .dp-greet-content {
@@ -186,19 +184,19 @@
 }
 
 .dp-greet-title {
-  font-family: var(--sans);
-  font-size: 0.84rem;
+  font-family: var(--display, 'Instrument Serif', Georgia, serif);
+  font-size: 1.05rem;
   font-weight: 600;
-  color: var(--green);
-  letter-spacing: -0.01em;
+  color: #174c3b;
+  letter-spacing: 0.01em;
 }
 
 .dp-greet-msg {
-  font-family: var(--sans);
+  font-family: var(--sans, 'DM Sans', sans-serif);
   font-size: 0.8rem;
-  line-height: 1.5;
-  color: rgba(21, 24, 21, 0.72);
-  margin-top: 4px;
+  line-height: 1.48;
+  color: rgba(21, 24, 21, 0.75);
+  margin-top: 3px;
 }
 
 @keyframes dpPopIn {
@@ -210,18 +208,17 @@
 
 .dp-card {
   position: absolute;
-  bottom: 80px;
+  bottom: 74px;
   right: 0;
-  width: 410px;
-  max-width: calc(100vw - 36px);
-  height: 610px;
-  max-height: calc(100vh - 120px);
-  max-height: calc(100dvh - 120px);
+  width: 416px;
+  max-width: calc(100vw - 32px);
+  height: 630px;
+  max-height: calc(100vh - 110px);
+  max-height: calc(100dvh - 110px);
   background: #fff;
-  border-radius: 0 !important;
-  box-shadow: 0 24px 56px -12px rgba(21, 24, 21, 0.3),
-              0 6px 18px -4px rgba(21, 24, 21, 0.1);
-  border: 1px solid var(--line);
+  box-shadow: 0 24px 60px -12px rgba(13, 46, 35, 0.4),
+              0 6px 18px -4px rgba(21, 24, 21, 0.12);
+  border: 1px solid #174c3b;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -245,17 +242,17 @@
   visibility: visible;
 }
 
-/* ─── Boxy Header with Generous Padding ───────────────────── */
+/* ─── Header: Luxury Dark Green with Gold Serif Title ─────── */
 
 .dp-header {
-  background: var(--green);
+  background: #0e3225;
   color: #fff;
-  padding: 18px 22px;
+  padding: 14px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .dp-header-brand {
@@ -267,13 +264,12 @@
 .dp-header-avatar {
   width: 40px;
   height: 40px;
-  border-radius: 0 !important;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #e2bf7d;
   position: relative;
   flex-shrink: 0;
 }
@@ -287,11 +283,10 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   background: #10b981;
-  border: 1.5px solid var(--green);
-  border-radius: 0 !important;
+  border: 1px solid #0e3225;
 }
 
 .dp-header-info {
@@ -300,19 +295,19 @@
 }
 
 .dp-header-info h3 {
-  font-family: var(--sans);
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-  color: #fff;
+  font-family: var(--display, 'Instrument Serif', Georgia, serif);
+  font-size: 1.18rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  color: #e2bf7d;
 }
 
 .dp-header-info p {
-  font: 500 0.58rem var(--mono);
+  font: 600 0.58rem var(--mono, 'DM Mono', monospace);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.65);
+  color: #34d399;
   margin-top: 3px;
   display: flex;
   align-items: center;
@@ -336,10 +331,9 @@
 .dp-header-btn {
   background: transparent;
   border: 1px solid transparent;
-  color: rgba(255, 255, 255, 0.7);
-  width: 32px;
-  height: 32px;
-  border-radius: 0 !important;
+  color: rgba(255, 255, 255, 0.75);
+  width: 30px;
+  height: 30px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -359,7 +353,7 @@
   height: 16px;
 }
 
-/* ─── Messages Stream with Generous Padding & Margin ──────── */
+/* ─── Messages Stream with Millimeter Blueprint Grid ──────── */
 
 .dp-messages {
   flex: 1;
@@ -367,13 +361,21 @@
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
-  padding: 24px 22px 20px;
+
+  /* Generous container padding - completely fixes left padding issue */
+  padding: 18px 18px 14px 18px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 12px;
   min-height: 0;
   scroll-behavior: smooth;
-  background: var(--mist);
+
+  /* Architectural millimeter graph grid background */
+  background-color: #f6f8f5;
+  background-image:
+    linear-gradient(rgba(23, 76, 59, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 76, 59, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
 .dp-messages::-webkit-scrollbar {
@@ -385,35 +387,32 @@
 }
 
 .dp-messages::-webkit-scrollbar-thumb {
-  background: rgba(21, 24, 21, 0.15);
-  border-radius: 0 !important;
+  background: rgba(23, 76, 59, 0.18);
 }
 
 /* Date / Session Banner Pill */
 .dp-date-badge {
   text-align: center;
-  margin: 0 0 8px;
+  margin: 0 0 6px;
 }
 
 .dp-date-badge span {
-  font: 500 0.56rem var(--mono);
-  letter-spacing: 0.14em;
+  font: 600 0.58rem var(--mono, 'DM Mono', monospace);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--green);
-  background: #fff;
-  border: 1px solid var(--line);
-  padding: 5px 14px;
-  border-radius: 0 !important;
+  color: #2e4437;
+  background: #dbe4d8;
+  border: 1px solid #c8d4c5;
+  padding: 4px 14px;
   display: inline-block;
 }
 
-/* ─── Boxy Message Cards ──────────────────────────────────── */
+/* ─── Architectural Message Layout (Matching Image 2) ──────── */
 
 .dp-msg {
   display: flex;
   flex-direction: column;
-  max-width: 84%;
-  margin: 2px 0;
+  width: 100%;
   animation: dpMsgSlide 0.2s ease-out;
 }
 
@@ -424,36 +423,66 @@
 
 .dp-msg--ai {
   align-self: flex-start;
+  width: 100%;
 }
 
 .dp-msg--user {
   align-self: flex-end;
+  width: auto;
+  max-width: 86%;
 }
 
-.dp-msg-bubble {
-  position: relative;
-  padding: 13px 18px 11px;
-  font-family: var(--sans);
-  font-size: 0.88rem;
-  line-height: 1.62;
-  word-break: break-word;
-  border-radius: 0 !important;
-}
-
-/* AI Concierge Boxy Card */
-.dp-msg--ai .dp-msg-bubble {
+/* AI Concierge Boxy Message Cards with Dark Green Left Bar */
+.dp-msg-card {
   background: #ffffff;
-  color: var(--ink);
-  border: 1px solid var(--line);
-  box-shadow: 0 2px 8px rgba(21, 24, 21, 0.04);
+  border: 1px solid #d5ddd3;
+  border-left: 3.5px solid #174c3b;
+  padding: 13px 16px;
+  margin-bottom: 8px;
+  font-family: var(--sans, 'DM Sans', sans-serif);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #1f2e26;
+  box-shadow: 0 1px 3px rgba(23, 76, 59, 0.04);
+  word-break: break-word;
 }
 
-/* User Guest Boxy Card */
-.dp-msg--user .dp-msg-bubble {
-  background: #e5eee7;
-  color: #112319;
+.dp-msg-card:last-child {
+  margin-bottom: 0;
+}
+
+.dp-msg-card strong {
+  font-weight: 600;
+  color: #11241a;
+}
+
+/* Reference Number Tag Badge Pill in AI Text */
+.dp-tag-ref {
+  background: #d8ece0;
+  border: 1px solid #6fa887;
+  color: #134635;
+  font-family: var(--mono, 'DM Mono', monospace);
+  font-weight: 700;
+  padding: 2px 7px;
+  display: inline-block;
+  letter-spacing: 0.04em;
+  font-size: 0.82rem;
+  margin: 0 2px;
+  vertical-align: baseline;
+}
+
+/* User Guest Message Bubble */
+.dp-user-bubble {
+  background: #e2ede4;
+  color: #11241a;
   border: 1px solid rgba(23, 76, 59, 0.25);
-  box-shadow: 0 2px 8px rgba(23, 76, 59, 0.05);
+  border-right: 3.5px solid #174c3b;
+  padding: 12px 16px;
+  font-family: var(--sans, 'DM Sans', sans-serif);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  box-shadow: 0 1px 4px rgba(23, 76, 59, 0.05);
+  word-break: break-word;
 }
 
 .dp-bubble-meta {
@@ -461,14 +490,14 @@
   align-items: center;
   justify-content: flex-end;
   gap: 5px;
-  margin-top: 8px;
-  font: 500 0.54rem var(--mono);
+  margin-top: 6px;
+  font: 500 0.54rem var(--mono, 'DM Mono', monospace);
   letter-spacing: 0.06em;
   color: rgba(21, 24, 21, 0.45);
 }
 
 .dp-bubble-ticks {
-  color: var(--green);
+  color: var(--green, #174c3b);
   display: inline-flex;
   align-items: center;
 }
@@ -481,17 +510,16 @@
 /* ─── Boxy Bank Accounts Card ─────────────────────────────── */
 
 .dp-bank-card {
-  margin: 14px 0 6px;
+  margin: 8px 0;
   background: #fff;
   border: 1px solid rgba(23, 76, 59, 0.35);
-  border-radius: 0 !important;
   overflow: hidden;
 }
 
 .dp-bank-card-title {
-  background: var(--green);
+  background: var(--green, #174c3b);
   color: #fff;
-  font: 500 0.62rem var(--mono);
+  font: 600 0.62rem var(--mono, 'DM Mono', monospace);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 9px 14px;
@@ -499,7 +527,7 @@
 
 .dp-bank-item {
   padding: 12px 14px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid rgba(21, 24, 21, 0.1);
 }
 
 .dp-bank-item:last-child {
@@ -508,8 +536,8 @@
 
 .dp-bank-name {
   font-weight: 600;
-  font-size: 0.8rem;
-  color: var(--green);
+  font-size: 0.82rem;
+  color: var(--green, #174c3b);
 }
 
 .dp-bank-acc {
@@ -517,37 +545,176 @@
   align-items: center;
   justify-content: space-between;
   margin-top: 6px;
-  font-family: var(--mono);
+  font-family: var(--mono, 'DM Mono', monospace);
   font-size: 0.88rem;
   font-weight: 600;
-  color: var(--ink);
-  background: var(--mist);
+  color: var(--ink, #151815);
+  background: #f7f8f5;
   padding: 6px 10px;
-  border: 1px solid var(--line);
-  border-radius: 0 !important;
+  border: 1px solid rgba(21, 24, 21, 0.12);
 }
 
 .dp-bank-acc button {
-  background: var(--green);
+  background: var(--green, #174c3b);
   border: none;
   color: #fff;
-  font: 500 0.54rem var(--mono);
+  font: 600 0.54rem var(--mono, 'DM Mono', monospace);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 4px 8px;
   cursor: pointer;
-  border-radius: 0 !important;
   transition: background 0.15s;
 }
 
 .dp-bank-acc button:hover {
-  background: #0f382b;
+  background: #0d2e23;
 }
 
 .dp-bank-holder {
   font-size: 0.72rem;
-  color: rgba(21, 24, 21, 0.6);
+  color: rgba(21, 24, 21, 0.65);
   margin-top: 4px;
+}
+
+/* ─── Boxy Reservation Voucher Card (Matching Image 2) ────── */
+
+.dp-voucher {
+  margin: 6px 0;
+  background: #fff;
+  border: 1px solid #174c3b;
+  box-shadow: 0 2px 6px rgba(23, 76, 59, 0.08);
+  overflow: hidden;
+}
+
+.dp-voucher-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #174c3b;
+  color: #fff;
+}
+
+.dp-voucher-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--display, 'Instrument Serif', Georgia, serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e2bf7d;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.dp-voucher-bell {
+  font-size: 1rem;
+}
+
+.dp-voucher-ref {
+  font: 700 0.65rem var(--mono, 'DM Mono', monospace);
+  letter-spacing: 0.08em;
+  background: #0a241b;
+  color: #34d399;
+  border: 1px solid #1c5c43;
+  padding: 3px 8px;
+}
+
+.dp-voucher-body {
+  padding: 14px 16px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dp-voucher-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.dp-voucher-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.dp-voucher-label {
+  font: 600 0.52rem var(--mono, 'DM Mono', monospace);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #85968b;
+}
+
+.dp-voucher-val {
+  font-family: var(--sans, 'DM Sans', sans-serif);
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #1f2e26;
+  line-height: 1.35;
+}
+
+.dp-voucher-val--total {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #174c3b;
+}
+
+.dp-voucher-badge {
+  display: inline-block;
+  background: #f0f4ef;
+  border: 1px solid #c8d4c5;
+  color: #2a4034;
+  font: 700 0.6rem var(--mono, 'DM Mono', monospace);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  width: fit-content;
+}
+
+.dp-voucher-divider {
+  border-bottom: 1px solid #edf2ec;
+}
+
+/* Note: dp-voucher-footer completely removed per user instruction */
+
+/* ─── Quick Suggestion Chips Bar (Directly Above Input Bar) ── */
+
+.dp-chips-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #f6f8f5;
+  border-top: 1px solid #d5ddd3;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+
+.dp-chips-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.dp-chip-btn {
+  background: #ffffff;
+  border: 1px solid #c8d4c5;
+  color: #233e31;
+  font: 600 0.62rem var(--mono, 'DM Mono', monospace);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.dp-chip-btn:hover {
+  background: #174c3b;
+  color: #ffffff;
+  border-color: #174c3b;
 }
 
 /* ─── Boxy Typing Indicator ───────────────────────────────── */
@@ -555,19 +722,19 @@
 .dp-typing-bubble {
   align-self: flex-start;
   background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 0 !important;
-  padding: 11px 16px;
+  border: 1px solid #d5ddd3;
+  border-left: 3.5px solid #174c3b;
+  padding: 10px 14px;
   display: flex;
   align-items: center;
   gap: 7px;
+  margin-bottom: 6px;
 }
 
 .dp-typing-dot {
   width: 5px;
   height: 5px;
-  background: var(--green);
-  border-radius: 0 !important;
+  background: #174c3b;
   animation: dpBounceBox 1.4s ease-in-out infinite;
 }
 
@@ -575,7 +742,7 @@
 .dp-typing-dot:nth-child(3) { animation-delay: 0.32s; }
 
 .dp-typing-text {
-  font: 500 0.58rem var(--mono);
+  font: 600 0.58rem var(--mono, 'DM Mono', monospace);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(21, 24, 21, 0.45);
@@ -587,130 +754,150 @@
   30%           { transform: translateY(-3px); }
 }
 
-/* ─── Boxy Reservation Voucher Card ───────────────────────── */
+/* ─── Graceful Error Fallback Card ────────────────────────── */
 
-.dp-voucher {
-  margin: 14px 0 6px;
-  border: 1px solid var(--green);
-  border-radius: 0 !important;
+.dp-error-card {
   background: #fff;
+  border: 1px solid #e5a5a5;
+  border-left: 4px solid #b91c1c;
+  padding: 14px 16px;
+  margin: 6px 0;
+  box-shadow: 0 2px 8px rgba(185, 28, 28, 0.08);
 }
 
-.dp-voucher-header {
+.dp-error-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  background: var(--green);
-  color: #fff;
-}
-
-.dp-voucher-brand {
-  font: 400 0.74rem var(--display);
-  letter-spacing: -0.01em;
-}
-
-.dp-voucher-ref {
-  font: 600 0.56rem var(--mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 0 !important;
-}
-
-.dp-voucher-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 14px;
-  padding: 14px;
-  background: #fff;
-}
-
-.dp-voucher-item .dp-voucher-label {
-  font: 500 0.52rem var(--mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(21, 24, 21, 0.45);
-  margin-bottom: 2px;
-}
-
-.dp-voucher-item .dp-voucher-val {
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: var(--ink);
-}
-
-.dp-voucher-item .dp-voucher-val--room {
-  color: var(--green);
-  font-weight: 600;
-}
-
-.dp-voucher-item--full {
-  grid-column: 1 / -1;
-  padding-top: 8px;
-  border-top: 1px dashed var(--line);
-}
-
-.dp-voucher-footer {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 9px 14px;
-  background: var(--mist);
-  border-top: 1px solid var(--line);
-  font: 500 0.54rem var(--mono);
+  gap: 8px;
+  font: 700 0.65rem var(--mono, 'DM Mono', monospace);
+  color: #991b1b;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--green);
+  margin-bottom: 8px;
 }
 
-.dp-voucher-footer svg {
-  width: 13px;
-  height: 13px;
-  flex-shrink: 0;
+.dp-error-body p {
+  font-family: var(--sans, 'DM Sans', sans-serif);
+  font-size: 0.83rem;
+  line-height: 1.5;
+  color: #374151;
+  margin-bottom: 12px;
 }
 
-/* ─── Boxy Bottom Input Bar with Generous Padding ─────────── */
+.dp-error-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dp-error-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 12px;
+  font: 600 0.65rem var(--mono, 'DM Mono', monospace);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.dp-error-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.dp-error-btn--wa {
+  background: #25d366;
+  color: #fff;
+  border: 1px solid #20ba5a;
+}
+
+.dp-error-btn--wa:hover {
+  background: #1ebd5a;
+}
+
+.dp-error-btn--call {
+  background: #174c3b;
+  color: #fff;
+  border: 1px solid #0f382b;
+}
+
+.dp-error-btn--call:hover {
+  background: #0d2e23;
+}
+
+/* ─── Boxy Bottom Input Bar with Micro-Text ───────────────── */
 
 .dp-input-bar {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 22px;
+  flex-direction: column;
+  padding: 12px 18px 8px 18px;
   background: #fff;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid #d5ddd3;
   flex-shrink: 0;
+}
+
+.dp-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dp-attach-btn {
+  width: 38px;
+  height: 38px;
+  background: #fff;
+  border: 1px solid #ccd6cb;
+  color: #52675b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.dp-attach-btn:hover {
+  border-color: #174c3b;
+  color: #174c3b;
+  background: #f7f8f5;
+}
+
+.dp-attach-btn svg {
+  width: 17px;
+  height: 17px;
 }
 
 .dp-chat-input {
   flex: 1;
-  border: 1px solid var(--line);
-  border-radius: 0 !important;
-  padding: 12px 16px;
-  font-family: var(--sans);
+  height: 38px;
+  border: 1px solid #ccd6cb;
+  padding: 0 14px;
+  font-family: var(--sans, 'DM Sans', sans-serif);
   font-size: 0.88rem;
-  color: var(--ink);
+  color: var(--ink, #151815);
   outline: none;
-  background: var(--mist);
+  background: #fcfdfc;
   transition: border-color 0.2s, background 0.2s;
 }
 
 .dp-chat-input:focus {
-  border-color: var(--green);
+  border-color: #174c3b;
   background: #fff;
 }
 
 .dp-chat-input::placeholder {
-  color: rgba(21, 24, 21, 0.4);
+  color: rgba(21, 24, 21, 0.42);
 }
 
 .dp-send-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 0 !important;
-  background: var(--green);
-  border: 1px solid var(--green);
+  width: 38px;
+  height: 38px;
+  background: #174c3b;
+  border: 1px solid #174c3b;
   color: #fff;
   display: flex;
   align-items: center;
@@ -721,19 +908,28 @@
 }
 
 .dp-send-btn:hover:not(:disabled) {
-  background: #0f382b;
-  transform: translateY(-1px);
+  background: #0d2e23;
 }
 
 .dp-send-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-  transform: none;
 }
 
 .dp-send-btn svg {
   width: 17px;
   height: 17px;
+}
+
+.dp-input-micro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  font: 500 0.52rem var(--mono, 'DM Mono', monospace);
+  color: #85968b;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 /* ─── Mobile View ─────────────────────────────────────────── */
@@ -750,60 +946,71 @@
   }
 
   .dp-launcher svg {
-    width: 23px;
-    height: 23px;
+    width: 24px;
+    height: 24px;
   }
 
   .dp-greet-pop {
     right: 0;
-    bottom: 66px;
+    bottom: 64px;
     width: calc(100vw - 32px);
     max-width: 340px;
     padding: 14px 16px;
   }
 
   .dp-card {
-    bottom: 66px;
+    bottom: 64px;
     right: -4px;
     width: calc(100vw - 24px);
-    max-width: 380px;
-    height: min(540px, 78vh);
-    max-height: calc(100dvh - 90px);
+    max-width: 390px;
+    height: min(560px, 80vh);
+    max-height: calc(100dvh - 84px);
   }
 
   .dp-header {
-    padding: 14px 16px;
+    padding: 12px 14px;
+  }
+
+  .dp-header-info h3 {
+    font-size: 1.05rem;
   }
 
   .dp-messages {
-    padding: 16px 14px;
-    gap: 14px;
+    padding: 14px 14px 10px 14px;
+    gap: 10px;
   }
 
-  .dp-msg {
-    max-width: 90%;
+  .dp-chips-bar {
+    padding: 6px 12px;
+    gap: 6px;
   }
 
-  .dp-msg-bubble {
-    padding: 11px 14px 9px;
+  .dp-chip-btn {
+    padding: 5px 9px;
+    font-size: 0.58rem;
   }
 
   .dp-input-bar {
-    padding: 12px 14px;
-    gap: 8px;
+    padding: 10px 14px 6px 14px;
+  }
+
+  .dp-attach-btn,
+  .dp-send-btn {
+    width: 36px;
+    height: 36px;
   }
 
   .dp-chat-input {
-    padding: 10px 12px;
+    height: 36px;
+    font-size: 0.84rem;
   }
 
-  .dp-send-btn {
-    width: 40px;
-    height: 40px;
+  .dp-input-micro {
+    font-size: 0.48rem;
   }
 }
 
-/* ─── Reduced Motion ──────────────────────────────────────── */
+/* ─── Accessibility: Reduced Motion ───────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
   .dp-card,

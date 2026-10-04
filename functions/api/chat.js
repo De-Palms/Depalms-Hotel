@@ -330,9 +330,10 @@ const SAVE_BOOKING_DECLARATION = {
 
 const CANDIDATE_MODELS = [
   'gemini-3.1-flash-lite',
-  'gemini-2.5-flash-lite',
-  'gemini-2.5-flash',
-  'gemini-2.0-flash',
+  'gemini-3.5-flash-lite',
+  'gemini-3.8-flash',
+  'gemini-3.7-flash',
+  'gemini-3.5-flash',
 ];
 
 async function callGemini(apiKey, model, contents, includeTools = true) {
@@ -598,11 +599,12 @@ export async function onRequestPost(context) {
     console.error('[/api/chat] Error:', error);
     return new Response(
       JSON.stringify({
-        reply: 'Warm greetings from De Palms Hotel Port Harcourt! How may I assist you today? (Direct line: +234 915 311 1592)',
-        bookingSaved: false,
+        isError: true,
+        fallback: true,
         error: error.message,
+        reply: 'I am momentarily experiencing network latency connecting with our reservations server. Please reach out to our 24/7 front desk directly below:',
       }),
-      { headers }
+      { status: 200, headers }
     );
   }
 }
