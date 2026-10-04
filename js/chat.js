@@ -172,9 +172,6 @@
         <!-- Boxy Bottom Input Bar with Micro-Text -->
         <form class="dp-input-bar" id="dp-chat-form">
           <div class="dp-input-row">
-            <button type="button" class="dp-attach-btn" id="dp-attach-btn" title="Attach payment proof or document" aria-label="Attach file">
-              ${ICON.paperclip}
-            </button>
             <input
               type="text"
               class="dp-chat-input"
@@ -200,7 +197,7 @@
   /* ─── DOM References ────────────────────────────────────── */
 
   let $root, $launcher, $greetPop, $greetClose, $card;
-  let $minimize, $closeBtn, $restart, $messages, $chatForm, $chatInput, $sendBtn, $attachBtn;
+  let $minimize, $closeBtn, $restart, $messages, $chatForm, $chatInput, $sendBtn;
 
   function bindDOM() {
     $root       = document.getElementById('dp-chat-root');
@@ -215,7 +212,6 @@
     $chatForm   = document.getElementById('dp-chat-form');
     $chatInput  = document.getElementById('dp-chat-input');
     $sendBtn    = document.getElementById('dp-send');
-    $attachBtn  = document.getElementById('dp-attach-btn');
   }
 
   /* ─── Scroll Isolation Enforcement ──────────────────────── */
@@ -468,7 +464,7 @@
     }
 
     // Fresh welcome message
-    const welcome = 'Warm welcome to De Palms Hotel Port Harcourt! 🛎️\n\nI am your front-desk concierge. Feel free to ask about our room suites, dining, amenities, or make a reservation. How may I assist you today?';
+    const welcome = 'Warm welcome to De Palms Hotel Port Harcourt! 🛎️\n\nHow may I assist your stay or reservation today?';
     const initTime = timeStr();
     appendMessage('assistant', welcome, '', initTime);
     chatHistory = [{ role: 'assistant', content: welcome, time: initTime }];
@@ -623,22 +619,6 @@
         }
       });
     });
-
-    // Attachment button click: guide to WhatsApp or front desk
-    if ($attachBtn) {
-      $attachBtn.addEventListener('click', () => {
-        const modal = confirm(
-          'To submit payment receipts or documents to De Palms Hotel:\n\nClick OK to forward directly to our Front Desk on WhatsApp (+234 915 311 1592).'
-        );
-        if (modal) {
-          window.open(
-            'https://wa.me/2349153111592?text=Hello%20De%20Palms%2C%20I%20am%20sending%20my%20payment%20receipt%20for%20my%20reservation.',
-            '_blank',
-            'noopener,noreferrer'
-          );
-        }
-      });
-    }
 
     // Click outside to close (desktop only)
     document.addEventListener('click', (e) => {
