@@ -177,7 +177,7 @@ async function sendEmailAlert(env, booking) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'De Palms Front Desk <bookings@depalmshotels.ng>',
+          from: 'De Palms Front Desk <bookings@depalmshotel.com>',
           to: [receptionEmail],
           subject: `🛎️ New Booking: ${booking.roomType} — ${booking.guestName} (${booking.checkIn} → ${booking.checkOut})`,
           html: buildEmailHtml(booking),
@@ -251,7 +251,7 @@ OFFICIAL ROOM RATES (Nigerian Naira):
 - Royal Room: ₦110,000/night (Includes Complimentary Breakfast)
 - Special Room: ₦120,000/night (Includes Complimentary Breakfast)
 - Ambassadorial Room: ₦150,000/night (Includes Complimentary Breakfast)
-- Presidential Suite: ₦250,000/night (Includes Complimentary Breakfast)
+- Presidential Suite 300,000/night (Includes Complimentary Breakfast)
 
 MULTIPLE ROOMS & BILL CALCULATION:
 - Guests can reserve single or multiple rooms across any combination of categories and nights.
