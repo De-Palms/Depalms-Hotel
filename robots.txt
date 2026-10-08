@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://depalmshotels.ng/sitemap.xml
+Sitemap: https://depalmshotel.com/sitemap.xml
