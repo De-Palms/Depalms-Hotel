@@ -57,12 +57,12 @@
       if (hasImage && hasVideo) {
         const allImages = room.gallery ? [room.image, ...room.gallery] : [room.image];
         const hasGallery = allImages.length > 1;
-        const imgsMarkup = allImages.map((src, i) => `<img class="room-img${i > 0 ? ' room-img--hidden' : ''}" src="${src}" alt="${room.name}${i > 0 ? ' \u2013 view ' + (i + 1) : ''}" loading="lazy">`).join('');
+        const imgsMarkup = allImages.map((src, i) => `<img class="room-img${i > 0 ? ' room-img--hidden' : ''}" src="${src}" alt="${room.name} at De Palms Hotels Port Harcourt${i > 0 ? ' – view ' + (i + 1) : ''}" loading="lazy">`).join('');
         mediaContent = `<div class="room-media has-image${hasGallery ? ' has-gallery' : ''}">${imgsMarkup}<video class="room-video" muted loop playsinline preload="metadata"><source src="${room.video}" type="video/mp4"></video><span class="room-index">0${index + 1}</span><button class="room-video-btn" type="button" data-video-toggle aria-label="Watch video tour of ${room.name}"><span class="video-btn-icon" aria-hidden="true">▶</span><span class="video-btn-text">Watch tour</span></button></div>`;
       } else if (hasVideo) {
         mediaContent = `<div class="room-media"><video class="room-video" muted loop playsinline preload="metadata"><source src="${room.video}" type="video/mp4"></video><span class="room-index">0${index + 1}</span><button class="room-video-btn" type="button" data-video-toggle aria-label="Watch video tour of ${room.name}"><span class="video-btn-icon" aria-hidden="true">▶</span><span class="video-btn-text">Watch tour</span></button></div>`;
       } else if (hasImage) {
-        mediaContent = `<div class="room-media"><img class="room-img" src="${room.image}" alt="${room.name}" loading="lazy"><span class="room-index">0${index + 1}</span></div>`;
+        mediaContent = `<div class="room-media"><img class="room-img" src="${room.image}" alt="${room.name} at De Palms Hotels Port Harcourt" loading="lazy"><span class="room-index">0${index + 1}</span></div>`;
       } else {
         mediaContent = `<div class="room-media"><span class="room-placeholder">Imagery to be supplied</span><span class="room-index">0${index + 1}</span></div>`;
       }
@@ -70,11 +70,13 @@
       const featureList = room.features || [room.details];
       const featuresMarkup = featureList.map((f) => `<span class="room-feature">${getFeatureIcon(f)}<span>${f}</span></span>`).join('');
 
-      // Prefilled WhatsApp booking message specifically naming this room
-      const roomBookingMsg = `Hello De Palms, I would like to book the ${room.name}.`;
+      // Prefilled WhatsApp booking message specifically naming this room with rate
+      const rateSuffix = room.formattedPrice ? ` (${room.formattedPrice}/night)` : '';
+      const roomBookingMsg = `Hello De Palms, I would like to book the ${room.name}${rateSuffix}.`;
       const roomWhatsAppUrl = createWhatsAppLink(roomBookingMsg);
+      const priceMarkup = room.formattedPrice ? `<span class="room-price-tag">${room.formattedPrice}<small>/night</small></span>` : '';
 
-      return `<article class="room-card">${mediaContent}<div class="room-meta"><div><h3><a class="room-title-link" href="${roomWhatsAppUrl}" target="_blank" rel="noreferrer" aria-label="Book ${room.name} on WhatsApp">${room.name}</a></h3><p class="lede">${room.description}</p><div class="room-features">${featuresMarkup}</div></div><a class="room-link" href="${roomWhatsAppUrl}" target="_blank" rel="noreferrer" aria-label="Book ${room.name} on WhatsApp">↗</a></div></article>`;
+      return `<article class="room-card">${mediaContent}<div class="room-meta"><div><div class="room-header-row"><h3><a class="room-title-link" href="${roomWhatsAppUrl}" target="_blank" rel="noreferrer" aria-label="Book ${room.name} on WhatsApp">${room.name}</a></h3>${priceMarkup}</div><p class="lede">${room.description}</p><div class="room-features">${featuresMarkup}</div></div><a class="room-link" href="${roomWhatsAppUrl}" target="_blank" rel="noreferrer" aria-label="Book ${room.name} on WhatsApp">↗</a></div></article>`;
     }).join('');
 
     document.querySelectorAll('[data-video-toggle]').forEach((btn) => {
@@ -142,6 +144,49 @@
   const placesContainer = document.querySelector('[data-places]');
   if (placesContainer && data.placesToVisit) {
     placesContainer.innerHTML = data.placesToVisit.map((place, index) => `<article class="place"><div class="place-art"><img src="${place.image}" alt="${place.name}" loading="lazy"><span class="place-city">Port Harcourt / 0${index + 1}</span><span class="place-number">0${index + 1}</span></div><div class="place-meta"><p class="place-type">${place.type}</p><h3>${place.name}</h3><p class="lede">${place.detail}</p></div></article>`).join('');
+
+    const placesViewport = document.querySelector('.places-viewport');
+    const prevBtn = document.querySelector('[data-places-prev]');
+    const nextBtn = document.querySelector('[data-places-next]');
+
+    if (placesViewport) {
+      const getScrollStep = () => {
+        const firstCard = placesViewport.querySelector('.place');
+        return firstCard ? firstCard.offsetWidth + 28 : 380;
+      };
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          placesViewport.scrollBy({ left: -getScrollStep(), behavior: 'smooth' });
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          placesViewport.scrollBy({ left: getScrollStep(), behavior: 'smooth' });
+        });
+      }
+
+      let isDown = false;
+      let startX = 0;
+      let scrollStart = 0;
+
+      placesViewport.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - placesViewport.offsetLeft;
+        scrollStart = placesViewport.scrollLeft;
+      });
+
+      window.addEventListener('mouseup', () => { isDown = false; });
+
+      placesViewport.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - placesViewport.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        placesViewport.scrollLeft = scrollStart - walk;
+      });
+    }
   }
 
   const contactContainer = document.querySelector('[data-contact]');

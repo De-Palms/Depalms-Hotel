@@ -1,10 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
   <url>
     <loc>https://depalmshotel.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+
+    <!-- Hotel Exterior & Main Image -->
+    <image:image>
+      <image:loc>https://depalmshotel.com/assets/hero/hotel-building.webp</image:loc>
+      <image:title>De Palms Hotels Building in Port Harcourt</image:title>
+      <image:caption>Boutique hotel exterior at 78 Elelenwo Road, G.R.A. Phase 2, Port Harcourt, Nigeria</image:caption>
+    </image:image>
+
+    <!-- Mini Deluxe & Super Deluxe Rooms -->
+    <image:image>
+      <image:loc>https://depalmshotel.com/assets/rooms/superdeluxe.webp</image:loc>
+      <image:title>Super Deluxe Room and Mini Deluxe Room at De Palms Hotels</image:title>
+      <image:caption>Comfortable and modern hotel room accommodation in GRA Phase 2 Port Harcourt</image:caption>
+    </image:image>
+
+    <!-- Royal Room -->
+    <image:image>
+      <image:loc>https://depalmshotel.com/assets/rooms/royalroom.webp</image:loc>
+      <image:title>Royal Room with King Bed at De Palms Hotels</image:title>
+      <image:caption>Spacious luxury hotel room with king-size bed, Wi-Fi and complimentary breakfast</image:caption>
+    </image:image>
+
+    <!-- Special Room -->
+    <image:image>
+      <image:loc>https://depalmshotel.com/assets/rooms/specialroom.webp</image:loc>
+      <image:title>Special Room at De Palms Hotels Port Harcourt</image:title>
+      <image:caption>Polished hotel room for unhurried rest with complimentary breakfast</image:caption>
+    </image:image>
+
+    <!-- Ambassadorial Room & Living Area -->
+    <image:image>
+      <image:loc>https://depalmshotel.com/assets/rooms/ambassadorialroom.webp</image:loc>
+      <image:title>Ambassadorial Room Bedroom at De Palms Hotels</image:title>
+      <image:caption>Elegant luxury suite bedroom with refined furnishings in Port Harcourt</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://depalmshotel.com/assets/rooms/ambassadorialliving.webp</image:loc>
+      <image:title>Ambassadorial Room Living Lounge at De Palms Hotels</image:title>
+      <image:caption>Dedicated living room and lounge area for Ambassadorial Suite guests</image:caption>
+    </image:image>
+
+    <!-- Presidential Room & Living Area -->
+    <image:image>
+      <image:loc>https://depalmshotel.com/assets/rooms/presidentialroom.webp</image:loc>
+      <image:title>Presidential Room Suite Bedroom at De Palms Hotels</image:title>
+      <image:caption>Expansive luxury presidential bedroom suite in G.R.A. Phase 2, Port Harcourt</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://depalmshotel.com/assets/rooms/Presidentialliving.webp</image:loc>
+      <image:title>Presidential Suite Living Room at De Palms Hotels</image:title>
+      <image:caption>Spacious private sitting room and lounge of the Presidential Suite</image:caption>
+    </image:image>
+
+    <!-- Lifestyle, Spaces & Amenities Images -->
+    <image:image>
+      <image:loc>https://depalmshotel.com/assets/lifestylecomfort/swimmingpool.webp</image:loc>
+      <image:title>Courtyard Swimming Pool at De Palms Hotels</image:title>
+      <image:caption>Private swimming pool surrounded by palm trees and murals in Port Harcourt</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://depalmshotel.com/assets/lifestylecomfort/bushbar.jpg</image:loc>
+      <image:title>Bush Bar Outdoor Lounge at De Palms Hotels</image:title>
+      <image:caption>Open-air bar wrapped in greenery and ambient lighting for drinks and relaxation</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://depalmshotel.com/assets/lifestylecomfort/restaurant.webp</image:loc>
+      <image:title>Fine Dining Restaurant at De Palms Hotels</image:title>
+      <image:caption>Restaurant serving fresh breakfast, lunch, dinner, and room service</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://depalmshotel.com/assets/lifestylecomfort/rooftop.webp</image:loc>
+      <image:title>Rooftop Terrace Lounge at De Palms Hotels</image:title>
+      <image:caption>Elevated terrace with panoramic views of Port Harcourt</image:caption>
+    </image:image>
   </url>
 
   <url>

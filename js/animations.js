@@ -17,30 +17,7 @@
     });
   });
 
-  /* Places to visit horizontal scroll-trigger sliding */
-  const placesSection = document.querySelector('.places');
-  const placesTrack = document.querySelector('[data-places]');
-  if (placesSection && placesTrack) {
-    const getDistance = () => {
-      const parentWidth = placesTrack.parentElement ? placesTrack.parentElement.clientWidth : window.innerWidth;
-      const totalWidth = placesTrack.scrollWidth;
-      return Math.max(totalWidth - parentWidth + 40, 0);
-    };
 
-    gsap.to(placesTrack, {
-      x: () => -getDistance(),
-      ease: 'none',
-      scrollTrigger: {
-        trigger: placesSection,
-        start: 'top top',
-        end: () => '+=' + Math.max(getDistance() + 250, 450),
-        scrub: 1,
-        pin: true,
-        anticipatePin: 1,
-        invalidateOnRefresh: true
-      }
-    });
-  }
 
   /* Contact section elements */
   const contactSection = document.querySelector('.contact');
