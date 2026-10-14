@@ -161,6 +161,17 @@
     'jollof rice': 'assets/restaurant/Party jollof with Chicken.webp',
   };
 
+  /* Normalizes image URLs, auto-converting Google Drive view links to direct image CDN links */
+  function normalizeImageUrl(url) {
+    if (!url) return '';
+    const trimmed = url.trim();
+    const driveMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if (driveMatch && (trimmed.includes('drive.google.com') || trimmed.includes('drive.usercontent.google.com'))) {
+      return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+    }
+    return trimmed;
+  }
+
   function renderCard(item) {
     const card = document.createElement('article');
     card.className = 'menu-card';
@@ -169,7 +180,8 @@
     const itemNameLower = (item['Item Name'] || '').toLowerCase();
     card.dataset.name = itemNameLower;
 
-    const imageUrl = item['Image URL'] || LOCAL_IMAGE_MAP[itemNameLower] || '';
+    const rawUrl = item['Image URL'] || LOCAL_IMAGE_MAP[itemNameLower] || '';
+    const imageUrl = normalizeImageUrl(rawUrl);
     const subCat = item['Sub Category'] || item['Category'] || '';
     const fallbackKey = getFallbackKey(item['Category'], item['Sub Category']);
     const fallbackSVG = FALLBACK_ICONS[fallbackKey] || FALLBACK_ICONS['soups'];
